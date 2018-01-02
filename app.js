@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
+const methodOverride = require('method-override');
 
 // Load Models globally
 require('./models/User');
@@ -24,7 +25,6 @@ const keys = require('./config/keys');
 // Handlebars Helpers
 const { truncate, stripTags, formatDate, select } = require('./helpers/hbs');
 
-
 // Map Global promises
 mongoose.Promise = global.Promise;
 // Mongoose connect
@@ -34,8 +34,12 @@ mongoose.connect(keys.mongoURI, { useMongoClient: true })
 
 const app = express();
 
+// Body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+// Method override middleware
+app.use(methodOverride('_method'));
 
 // Handlebars middleware
 app.engine('handlebars', exphbs({
